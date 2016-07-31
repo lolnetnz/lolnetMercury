@@ -80,6 +80,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>6.0.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.3m</version>
+        </dependency>
+
     </dependencies>
 
     <build>

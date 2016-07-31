@@ -52,5 +52,6 @@
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:2.4.7" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.21" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:6.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.mindrot:jbcrypt:0.3m" level="project" />
   </component>
 </module>
