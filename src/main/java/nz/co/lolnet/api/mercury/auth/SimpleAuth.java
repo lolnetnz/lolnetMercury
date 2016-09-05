@@ -26,7 +26,7 @@ import nz.co.lolnet.api.mercury.Main;
 @Path("/auth")
 public class SimpleAuth {
 
-    final String folderLocation = "/var/lib/jetty9/config/auth";
+    static final String folderLocation = "/var/lib/jetty9/config/auth";
 
     public boolean auth(String token, String IP) {
         if (Main.getConfig().getStringList("tokens").contains(token)) {
@@ -69,12 +69,12 @@ public class SimpleAuth {
         return "" + isLoggedIn;
     }
 
-    public boolean isLoggedIn(String IP) {
+    public static boolean isLoggedIn(String IP) {
         File file = new File(getConfigFolder(), IP);
         return file.exists();
     }
 
-    private File getConfigFolder() {
+    private static File getConfigFolder() {
         return new File(folderLocation);
     }
 }
