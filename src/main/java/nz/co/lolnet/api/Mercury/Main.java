@@ -14,6 +14,7 @@ import org.bson.Document;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import nz.co.lolnet.api.mercury.config.MercuryConfig;
 
 @Path("")
 public class Main {
@@ -21,6 +22,7 @@ public class Main {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String helloWorld() {
+        new MercuryConfig().setupConfigFile();
         MongoDatabase mongoDB = DatabaseConnection.getDatabase();
         MongoCollection coll = mongoDB.getCollection("test");
         Document dbObject = (Document) coll.find().first();
