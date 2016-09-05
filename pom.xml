@@ -4,7 +4,6 @@
     <artifactId>Mercury</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <url>http://www.lxgaming.github.io</url>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
