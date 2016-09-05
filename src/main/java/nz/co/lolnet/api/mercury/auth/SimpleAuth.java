@@ -6,7 +6,7 @@
 package nz.co.lolnet.api.mercury.auth;
 
 import java.util.HashSet;
-import javax.annotation.Resource;
+import java.util.prefs.Preferences;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -15,8 +15,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
 import nz.co.lolnet.api.mercury.Main;
 
 /**
@@ -25,13 +23,14 @@ import nz.co.lolnet.api.mercury.Main;
  */
 @Path("/auth")
 public class SimpleAuth {
-    public static HashSet<String> trustedIP = new HashSet<>();
+    
+    static Preferences userNodeForPackage = java.util.prefs.Preferences.userRoot();
     
     public boolean auth(String token,String IP)
     {
         if (Main.getConfig().getStringList("tokens").contains(token))
         {
-            trustedIP.add(IP);
+            userNodeForPackage.put(IP, "true");
         }
         return true;
     }
@@ -56,6 +55,14 @@ public class SimpleAuth {
     @Produces(MediaType.TEXT_PLAIN)
     public String logout(@Context HttpServletRequest requestContext,@Context SecurityContext context) {
         String yourIP = requestContext.getRemoteAddr();
-        return "" + trustedIP.remove(yourIP);
+        boolean isLoggedIn = isLoggedIn(yourIP);
+        userNodeForPackage.remove(yourIP);
+        return "" + isLoggedIn;
+    }
+    
+    public static boolean isLoggedIn(String IP)
+    {
+        String get = userNodeForPackage.get(IP, "");
+        return get.equals("true");
     }
 }

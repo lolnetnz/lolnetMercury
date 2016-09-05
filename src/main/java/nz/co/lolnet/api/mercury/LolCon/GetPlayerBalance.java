@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -21,8 +20,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
 import nz.co.lolnet.api.mercury.auth.SimpleAuth;
 import nz.co.lolnet.api.mercury.mysql.MysqlConnection;
 import org.json.simple.JSONObject;
@@ -46,7 +43,7 @@ public class GetPlayerBalance {
     public String sayHello(@PathParam("playerName") String playerName , @Context HttpServletRequest requestContext,@Context SecurityContext context) {
 
         String yourIP = requestContext.getRemoteAddr();
-        if (!SimpleAuth.trustedIP.contains(yourIP))
+        if (!SimpleAuth.isLoggedIn(yourIP))
         {
             return "No Access, please login first";
         }
