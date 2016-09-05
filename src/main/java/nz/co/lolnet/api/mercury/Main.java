@@ -4,18 +4,19 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import nz.co.lolnet.api.mercury.config.Configuration;
 
 import nz.co.lolnet.api.mercury.config.MercuryConfig;
 
 @Path("")
 public class Main {
 
+    private static Configuration config;
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String helloWorld() {
-        MercuryConfig config = new MercuryConfig();
-        config.setupConfigFile();
-        return config.config.getString("hello.player");
+        
+        return getConfig().getString("hello.player");
         /*
         MongoDatabase mongoDB = DatabaseConnection.getDatabase();
         MongoCollection coll = mongoDB.getCollection("test");
@@ -36,5 +37,14 @@ public class Main {
         return "Hello, world!";
          */
     }
-
+    
+    public static Configuration getConfig() {
+        if (config == null)
+        {
+            MercuryConfig mconfig = new MercuryConfig();
+            mconfig.setupConfigFile();
+            config = mconfig.config;
+        }
+        return config;
+    }
 }
