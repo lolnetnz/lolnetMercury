@@ -21,7 +21,7 @@ public class MercuryConfig {
     }
 
     final String folderLocation = "/var/lib/jetty9/config/";
-    private static Configuration config;
+    public Configuration config;
 
     public void setupConfigFile() {
         try {

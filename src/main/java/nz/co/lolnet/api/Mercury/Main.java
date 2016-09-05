@@ -22,7 +22,10 @@ public class Main {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String helloWorld() {
-        new MercuryConfig().setupConfigFile();
+        MercuryConfig config = new MercuryConfig();
+        config.setupConfigFile();
+        return config.config.getString("hello.player");
+        /*
         MongoDatabase mongoDB = DatabaseConnection.getDatabase();
         MongoCollection coll = mongoDB.getCollection("test");
         Document dbObject = (Document) coll.find().first();
@@ -40,6 +43,7 @@ public class Main {
             e.printStackTrace();
         }
         return "Hello, world!";
+        */
     }
 
 }
