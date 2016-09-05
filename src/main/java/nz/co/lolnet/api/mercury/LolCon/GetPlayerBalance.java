@@ -12,11 +12,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
+import nz.co.lolnet.api.mercury.auth.SimpleAuth;
 import nz.co.lolnet.api.mercury.mysql.MysqlConnection;
 import org.json.simple.JSONObject;
 
@@ -26,16 +31,28 @@ import org.json.simple.JSONObject;
  */
 @Path("/lolcoins/getplayerbalance")
 public class GetPlayerBalance {
-    
+
+    @Resource
+    WebServiceContext webServiceContext;
+
     @GET
     public String noInputHere() {
         return "Missing playerName";
     }
-    
+
     @GET
     @Path("{playerName}")
     @Produces(MediaType.APPLICATION_JSON)
     public String sayHello(@PathParam("playerName") String playerName) {
+
+        MessageContext messageContext = webServiceContext.getMessageContext();
+        HttpServletRequest request = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
+        String callerIpAddress = request.getRemoteAddr();
+        if (!SimpleAuth.trustedIP.contains(callerIpAddress))
+        {
+            return "No Access, please login first";
+        }
+
         Connection con = null;
         PreparedStatement ps = null;
         Statement st = null;
@@ -53,7 +70,7 @@ public class GetPlayerBalance {
             JSONObject outputJ = new JSONObject();
             outputJ.put("playerbalance", output);
             return outputJ.toJSONString();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(GetPlayerBalance.class.getName()).log(Level.SEVERE, null, ex);
         }
