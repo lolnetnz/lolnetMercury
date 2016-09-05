@@ -18,7 +18,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import nz.co.lolnet.api.mercury.auth.SimpleAuth;
@@ -32,8 +34,6 @@ import org.json.simple.JSONObject;
 @Path("/lolcoins/getplayerbalance")
 public class GetPlayerBalance {
 
-    @Resource
-    WebServiceContext webServiceContext;
 
     @GET
     public String noInputHere() {
@@ -43,12 +43,10 @@ public class GetPlayerBalance {
     @GET
     @Path("{playerName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String sayHello(@PathParam("playerName") String playerName) {
+    public String sayHello(@PathParam("playerName") String playerName , @Context HttpServletRequest requestContext,@Context SecurityContext context) {
 
-        MessageContext messageContext = webServiceContext.getMessageContext();
-        HttpServletRequest request = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
-        String callerIpAddress = request.getRemoteAddr();
-        if (!SimpleAuth.trustedIP.contains(callerIpAddress))
+        String yourIP = requestContext.getRemoteAddr();
+        if (!SimpleAuth.trustedIP.contains(yourIP))
         {
             return "No Access, please login first";
         }

@@ -12,7 +12,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import nz.co.lolnet.api.mercury.Main;
@@ -24,10 +26,6 @@ import nz.co.lolnet.api.mercury.Main;
 @Path("/auth")
 public class SimpleAuth {
     public static HashSet<String> trustedIP = new HashSet<>();
-    
-    
-    @Resource
-    WebServiceContext webServiceContext;
     
     public boolean auth(String token,String IP)
     {
@@ -48,20 +46,16 @@ public class SimpleAuth {
     @GET
     @Path("login/{token}")
     @Produces(MediaType.TEXT_PLAIN)
-    public String loginWithToken(@PathParam("token") String token) {
-        MessageContext messageContext = webServiceContext.getMessageContext();
-        HttpServletRequest request = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
-        String callerIpAddress = request.getRemoteAddr();
-        return "" + auth(token, callerIpAddress);
+    public String loginWithToken(@PathParam("token") String token, @Context HttpServletRequest requestContext,@Context SecurityContext context) {
+        String yourIP = requestContext.getRemoteAddr();
+        return "" + auth(token, yourIP);
     }
     
     @GET
     @Path("logout")
     @Produces(MediaType.TEXT_PLAIN)
-    public String logout() {
-        MessageContext messageContext = webServiceContext.getMessageContext();
-        HttpServletRequest request = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
-        String callerIpAddress = request.getRemoteAddr();
-        return "" + trustedIP.remove(callerIpAddress);
+    public String logout(@Context HttpServletRequest requestContext,@Context SecurityContext context) {
+        String yourIP = requestContext.getRemoteAddr();
+        return "" + trustedIP.remove(yourIP);
     }
 }
