@@ -1,15 +1,12 @@
-package nz.co.lolnet.api.Mercury;
+package nz.co.lolnet.api.mercury;
+
+import java.util.Arrays;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
 
-import java.util.Arrays;
-
-/**
- * Created by d_win on 30/07/2016.
- */
 public class DatabaseConnection {
 
     private static DatabaseConnection instance;

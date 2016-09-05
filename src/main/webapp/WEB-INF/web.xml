@@ -12,7 +12,7 @@
 
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>nz.co.lolnet.api.Mercury</param-value>
+            <param-value>nz.co.lolnet.api.mercury</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
 

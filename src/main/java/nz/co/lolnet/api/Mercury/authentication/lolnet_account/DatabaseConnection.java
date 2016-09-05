@@ -1,15 +1,13 @@
-package nz.co.lolnet.api.Mercury.authentication.lolnet_account;
-
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import nz.co.lolnet.api.Mercury.Properties;
+package nz.co.lolnet.api.mercury.authentication.lolnet_account;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/**
- * Created by d_win on 30/07/2016.
- */
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+import nz.co.lolnet.api.mercury.Properties;
+
 public class DatabaseConnection {
 
     private static DatabaseConnection instance;

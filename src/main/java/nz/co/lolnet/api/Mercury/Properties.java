@@ -1,12 +1,9 @@
-package nz.co.lolnet.api.Mercury;
+package nz.co.lolnet.api.mercury;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by d_win on 30/07/2016.
- */
 public class Properties {
 
     private static Properties instance;
