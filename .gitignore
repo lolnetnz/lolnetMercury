@@ -58,3 +58,6 @@ Thumbs.db
 /temp/
 /target/
 nb-configuration.xml
+/.settings/
+.classpath
+.project
