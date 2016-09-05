@@ -5,8 +5,10 @@
  */
 package nz.co.lolnet.api.mercury.auth;
 
-import java.util.HashSet;
-import java.util.prefs.Preferences;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -23,46 +25,56 @@ import nz.co.lolnet.api.mercury.Main;
  */
 @Path("/auth")
 public class SimpleAuth {
-    
-    static Preferences userNodeForPackage = java.util.prefs.Preferences.userRoot();
-    
-    public boolean auth(String token,String IP)
-    {
-        if (Main.getConfig().getStringList("tokens").contains(token))
-        {
-            userNodeForPackage.put(IP, "true");
+
+    final String folderLocation = "/var/lib/jetty9/config/auth";
+
+    public boolean auth(String token, String IP) {
+        if (Main.getConfig().getStringList("tokens").contains(token)) {
+            File file = new File(getConfigFolder(), IP);
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(SimpleAuth.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return true;
     }
-    
+
     @GET
     @Path("login")
     @Produces(MediaType.TEXT_PLAIN)
     public String login() {
+        if (!getConfigFolder().exists()) {
+            getConfigFolder().mkdir();
+        }
         return "require token";
     }
-    
+
     @GET
     @Path("login/{token}")
     @Produces(MediaType.TEXT_PLAIN)
-    public String loginWithToken(@PathParam("token") String token, @Context HttpServletRequest requestContext,@Context SecurityContext context) {
+    public String loginWithToken(@PathParam("token") String token, @Context HttpServletRequest requestContext, @Context SecurityContext context) {
         String yourIP = requestContext.getRemoteAddr();
         return "" + auth(token, yourIP);
     }
-    
+
     @GET
     @Path("logout")
     @Produces(MediaType.TEXT_PLAIN)
-    public String logout(@Context HttpServletRequest requestContext,@Context SecurityContext context) {
+    public String logout(@Context HttpServletRequest requestContext, @Context SecurityContext context) {
         String yourIP = requestContext.getRemoteAddr();
         boolean isLoggedIn = isLoggedIn(yourIP);
-        userNodeForPackage.remove(yourIP);
+        File file = new File(getConfigFolder(), yourIP);
+        file.delete();
         return "" + isLoggedIn;
     }
-    
-    public static boolean isLoggedIn(String IP)
-    {
-        String get = userNodeForPackage.get(IP, "");
-        return get.equals("true");
+
+    public boolean isLoggedIn(String IP) {
+        File file = new File(getConfigFolder(), IP);
+        return file.exists();
+    }
+
+    private File getConfigFolder() {
+        return new File(folderLocation);
     }
 }
