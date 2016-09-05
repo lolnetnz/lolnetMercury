@@ -23,7 +23,7 @@ import nz.co.lolnet.api.mercury.Main;
  */
 @Path("/auth")
 public class SimpleAuth {
-    public static HashSet<String> trustedIP;
+    public static HashSet<String> trustedIP = new HashSet<>();
     
     
     @Resource
