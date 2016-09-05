@@ -1,19 +1,10 @@
 package nz.co.lolnet.api.mercury;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.bson.Document;
-
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import nz.co.lolnet.api.mercury.config.MercuryConfig;
 
 @Path("")
@@ -43,7 +34,7 @@ public class Main {
             e.printStackTrace();
         }
         return "Hello, world!";
-        */
+         */
     }
 
 }
