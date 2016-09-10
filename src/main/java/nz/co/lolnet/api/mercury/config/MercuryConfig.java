@@ -1,41 +1,40 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package nz.co.lolnet.api.mercury.config;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- *
- * @author James
- */
+import nz.co.lolnet.api.mercury.util.ConsoleOutput;
+
 public class MercuryConfig {
-
+	
+	public static Configuration config;
+	private static File configFile;
+	private final File configDirectory = new File("/var/lib/jetty9/config/");
+	
     private File getConfigFolder() {
-        return new File(folderLocation);
+        return configDirectory;
     }
-
-    final String folderLocation = "/var/lib/jetty9/config/";
-    public Configuration config;
-
-    public void setupConfigFile() {
+    
+    public void loadConfig() {
+    	if (!getConfigFolder().exists()) {
+    		getConfigFolder().mkdir();
+    		ConsoleOutput.info("Successfully created configuration directory.");
+    	}
+    	
         try {
-            if (!getConfigFolder().exists()) {
-                getConfigFolder().mkdir();
-            }
-            File configFile = new File(getConfigFolder(), "config.yml");
+        	configFile = new File(getConfigFolder(), "config.yml");
+        	
             if (!configFile.exists()) {
                 configFile.createNewFile();
+                ConsoleOutput.info("Successfully created configuration file.");
             }
-            this.config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);
-            ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, new File(getConfigFolder(), "config.yml"));
+            
+            config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);
+            ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, configFile);
+            ConsoleOutput.info("Successfully loaded configuration file.");
         } catch (IOException ex) {
-            Logger.getLogger(MercuryConfig.class.getName()).log(Level.SEVERE, null, ex);
+        	ConsoleOutput.error("Exception loading configuration file!");
+        	ex.printStackTrace();
         }
     }
 }

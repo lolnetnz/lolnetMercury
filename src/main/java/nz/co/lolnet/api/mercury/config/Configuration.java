@@ -11,7 +11,7 @@ import java.util.Map;
 public final class Configuration {
 
     private static final char SEPARATOR = '.';
-    final Map<String, Object> self;
+    public final Map<String, Object> self;
     private final Configuration defaults;
 
     public Configuration() {
@@ -30,7 +30,7 @@ public final class Configuration {
             String key = (entry.getKey() == null) ? "null" : entry.getKey().toString();
 
             if (entry.getValue() instanceof Map) {
-                this.self.put(key, new Configuration((Map) entry.getValue(), (defaults == null) ? null : defaults.getSection(key)));
+                this.self.put(key, new Configuration((Map<?, ?>) entry.getValue(), (defaults == null) ? null : defaults.getSection(key)));
             } else {
                 this.self.put(key, entry.getValue());
             }
@@ -90,7 +90,7 @@ public final class Configuration {
 
     public void set(String path, Object value) {
         if (value instanceof Map) {
-            value = new Configuration((Map) value, (defaults == null) ? null : defaults.getSection(path));
+            value = new Configuration((Map<?, ?>) value, (defaults == null) ? null : defaults.getSection(path));
         }
 
         Configuration section = getSectionFor(path);
